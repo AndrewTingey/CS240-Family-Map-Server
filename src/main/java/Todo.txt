@@ -11,7 +11,7 @@ service class
             LoginService
             RegisterService - needs fill generation
         TODO:
-            EventIDService
+            EventIDService - passed string eventID, authtoken, or username?
             EventService
             FillService - fill generations FMSI.pptx, slide 14
             LoadService

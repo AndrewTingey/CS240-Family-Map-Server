@@ -4,6 +4,7 @@
 package Model;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Object to represent an event
@@ -159,5 +160,11 @@ public class Event {
     @Override
     public int hashCode() {
         return Objects.hash(eventID, associatedUsername, personID, latitude, longitude, country, city, eventType, year);
+    }
+
+    public String generateEventID(String eventType) {
+        String random = UUID.randomUUID().toString();
+        assert random.length() > 4;
+        return eventType + random.substring(0, 5);
     }
 }

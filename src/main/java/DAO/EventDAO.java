@@ -57,7 +57,7 @@ public class EventDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             //e.printStackTrace();
-            throw new DataAccessException("Error encountered while inserting an event into the database");
+            throw new DataAccessException("Error encountered while inserting an event into the database: \n" + e.getMessage());
         }
     }
 
