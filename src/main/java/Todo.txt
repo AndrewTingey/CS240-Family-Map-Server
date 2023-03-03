@@ -1,0 +1,45 @@
+Create handler subclass so each can authenticate auth token
+
+to add
+encoder class json to objects, other way, using GSON
+GSON dependency already added
+
+to do
+service class
+        DONE:
+            ClearService
+            LoginService
+            RegisterService - needs fill generation
+        TODO:
+            EventIDService
+            EventService
+            FillService - fill generations FMSI.pptx, slide 14
+            LoadService
+            PersonIDService
+            PersonService
+
+
+to do
+create server project with given pass off test cases
+create server class and get filehandler working first
+this will allow you to serve the web page
+
+check:
+also check for code duplication on;
+HTTP Handler classes
+Service classes
+request/result classes - success/message in base class
+        ClearResult, EventIDResult, EventResult done
+        finish the other 6 inheriting from Result.java
+DAO classes
+
+can do:
+class persongenerator - so that fillservice and registerservice
+dont share or break one db connection
+
+Generate a fake family tree (algorithm given) ^v
+
+can do:
+loading JSON data, create classes that match the data
+use a static class to cache the data
+
