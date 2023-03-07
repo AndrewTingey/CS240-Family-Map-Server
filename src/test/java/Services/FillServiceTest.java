@@ -20,10 +20,24 @@ public class FillServiceTest {
 
     @Test
     public void fill() {
-        FillRequest request = new FillRequest("andrewtingey", 1);
+        FillRequest request = new FillRequest("andrewtingey", 4);
         FillResult result = new FillService().fill(request);
         System.out.println(result.getMessage());
         assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void uniqueNames() {
+        FillRequest r1 = new FillRequest("Andy", 2);
+        FillRequest r2 = new FillRequest("Gran", 2);
+        FillResult result1 = new FillService().fill(r1);
+        FillResult result2 = new FillService().fill(r2);
+        System.out.println(result1.getMessage());
+        assertTrue(result1.isSuccess());
+        System.out.println(result2.getMessage());
+        assertTrue(result2.isSuccess());
+
+
     }
 
 

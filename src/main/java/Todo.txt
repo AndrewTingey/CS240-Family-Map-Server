@@ -1,5 +1,9 @@
 Create handler subclass so each can authenticate auth token
 
+to do:
+Deconder/FNames.java
+deserialize java objects and pass to FillService for name generation
+
 to add
 encoder class json to objects, other way, using GSON
 GSON dependency already added

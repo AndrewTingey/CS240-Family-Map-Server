@@ -7,6 +7,9 @@ import DAO.PersonDAO;
 import Model.Event;
 import Model.Location;
 import Model.Person;
+import ObjectDecoder.FNames;
+import ObjectDecoder.MNames;
+import ObjectDecoder.SNames;
 import Requests.FillRequest;
 import Results.FillResult;
 
@@ -21,6 +24,9 @@ public class FillService {
     private String associatedUsername;
     private int personsAdded = 0;
     private int eventsAdded = 0;
+    private FNames fNames = new FNames();
+    private MNames mnames = new MNames();
+    private SNames snames = new SNames();
     /**
      * fills the data base with info
      * @return result with success or error message
@@ -153,18 +159,15 @@ public class FillService {
     }
 
     private String generateLastName() {
-        //todo
-        //todo load these in from json/snames.json
-        return "Smith"; // great family
+        return snames.getRandomName();
     }
 
     private String generateFirstName(String gender) {
-        //todo
-        //todo load these in from json/fnames.json
+
         if (gender == "F") {
-            return "Sister";
+            return fNames.getRandomName();
         }
-        return "Brother";
+        return mnames.getRandomName();
     }
 
     private Location generateLocation() {
