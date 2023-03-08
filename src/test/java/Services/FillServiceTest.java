@@ -2,6 +2,7 @@ package Services;
 
 import Requests.FillRequest;
 import Results.ClearResult;
+import Results.EventResult;
 import Results.FillResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,9 +37,5 @@ public class FillServiceTest {
         assertTrue(result1.isSuccess());
         System.out.println(result2.getMessage());
         assertTrue(result2.isSuccess());
-
-
     }
-
-
 }

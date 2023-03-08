@@ -5,6 +5,8 @@ package Requests;
 
 import Model.*;
 
+import java.util.List;
+
 /**
  * Request to load values into the database
  */
@@ -12,15 +14,15 @@ public class LoadRequest {
     /**
      * array of user objects to be loaded
      */
-    private User[] users;
+    private List<User> users;
     /**
      * array of person objects to be loaded
      */
-    private Person[] persons;
+    private List<Person> persons;
     /**
      * array of event objects to be laoded
      */
-    private Event[] events;
+    private List<Event> events;
 
     /**
      * default constructor
@@ -34,33 +36,32 @@ public class LoadRequest {
      * @param persons
      * @param events
      */
-    public LoadRequest( User[] users, Person[] persons, Event[] events ) {
+    public LoadRequest( List<User> users, List<Person> persons, List<Event> events ) {
         this.users = users;
         this.persons = persons;
         this.events = events;
     }
-
-    public User[] getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers( User[] users ) {
+    public void setUsers( List<User> users ) {
         this.users = users;
     }
 
-    public Person[] getPersons() {
+    public List<Person> getPersons() {
         return persons;
     }
 
-    public void setPersons( Person[] persons ) {
+    public void setPersons( List<Person> persons ) {
         this.persons = persons;
     }
 
-    public Event[] getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents( Event[] events ) {
+    public void setEvents( List<Event> events ) {
         this.events = events;
     }
 }

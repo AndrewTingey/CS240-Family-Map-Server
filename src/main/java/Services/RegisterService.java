@@ -3,6 +3,7 @@ import DAO.*;
 import Model.Authtoken;
 import Model.Person;
 import Model.User;
+import Requests.FillRequest;
 import Requests.RegisterRequest;
 import Results.RegisterResult;
 import java.sql.Connection;
@@ -32,6 +33,10 @@ public class RegisterService {
 
             //TODO
             //generate 4 generations of ancestor data for new user
+            FillRequest fr = new FillRequest(r.getUsername(), 4);
+            new FillService().fillFromRegister(fr, c);
+
+
             new UserDAO(c).insert(user);
             new AuthTokenDAO(c).insert(authtoken);
 

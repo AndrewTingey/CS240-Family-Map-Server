@@ -1,9 +1,5 @@
 Create handler subclass so each can authenticate auth token
 
-to do:
-Deconder/FNames.java
-deserialize java objects and pass to FillService for name generation
-
 to add
 encoder class json to objects, other way, using GSON
 GSON dependency already added
@@ -14,11 +10,11 @@ service class
             ClearService
             LoginService
             RegisterService - needs fill generation
-        TODO:
-            EventIDService - passed string eventID, authtoken, or username?
-            EventService
             FillService - fill generations FMSI.pptx, slide 14
-            LoadService
+            EventService
+            EventIDService
+            LoadService - never tested this one, hopefully it works
+        TODO:
             PersonIDService
             PersonService
 
@@ -46,4 +42,7 @@ Generate a fake family tree (algorithm given) ^v
 can do:
 loading JSON data, create classes that match the data
 use a static class to cache the data
+
+can do:
+set generate people such that children inherit fathers last name
 

@@ -8,6 +8,7 @@ import Model.Event;
 import Model.Location;
 import Model.Person;
 import ObjectDecoder.FNames;
+import ObjectDecoder.LocationDeserializer;
 import ObjectDecoder.MNames;
 import ObjectDecoder.SNames;
 import Requests.FillRequest;
@@ -20,13 +21,13 @@ import java.util.Random;
  * object to fill the database with data
  */
 public class FillService {
-
     private String associatedUsername;
     private int personsAdded = 0;
     private int eventsAdded = 0;
     private FNames fNames = new FNames();
     private MNames mnames = new MNames();
     private SNames snames = new SNames();
+    private LocationDeserializer locations = new LocationDeserializer();
     /**
      * fills the data base with info
      * @return result with success or error message
@@ -45,6 +46,23 @@ public class FillService {
 
             db.closeConnection(true);
 
+            String message = "Successfully added " + personsAdded + " persons and " + eventsAdded + " events to the database.";
+            return new FillResult(message, true);
+        } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
+            db.closeConnection(false);
+            FillResult result = new FillResult("Error: " + e.getMessage(), false);
+            return result;
+        }
+    }
+    public FillResult fillFromRegister ( FillRequest r, Connection c ) {
+        this.associatedUsername = r.getUsername();
+        int generations = 4; //default for registering
+
+        Database db = new Database();
+        try {
+            //dont open or close connection bc register already has one passed as c
+            generatePerson("M", generations, c, 2001);
             String message = "Successfully added " + personsAdded + " persons and " + eventsAdded + " events to the database.";
             return new FillResult(message, true);
         } catch (DataAccessException e) {
@@ -132,8 +150,6 @@ public class FillService {
                 location.getCountry(), location.getCity(),
                 "Death", deathDate);
     }
-
-
     private Event generateBirthdate( int kidsBday ) {
         //mom is between 13-50 years older than kid
         int birthdate = getRandomDate(kidsBday-50, kidsBday-14);
@@ -145,10 +161,6 @@ public class FillService {
                 "Birth", birthdate);
     }
 
-    private int getkidsBday() {
-        return 1990;
-    }
-
     public int getRandomDate( int minYear, int maxYear ) {
         //minYear included, maxYear excluded
         //[minYear, maxYear)
@@ -157,23 +169,17 @@ public class FillService {
         int val = rand.nextInt(dif);
         return val + minYear;
     }
-
     private String generateLastName() {
         return snames.getRandomName();
     }
-
     private String generateFirstName(String gender) {
-
         if (gender == "F") {
             return fNames.getRandomName();
         }
         return mnames.getRandomName();
     }
-
     private Location generateLocation() {
-        //todo
-        //todo: load these in from json/locations.json
-        return new Location("Sweden", "Örnsköldsvik", 63.2833F, 18.7333F);
+        return locations.getRandomLocation();
     }
 
     /**
@@ -181,7 +187,6 @@ public class FillService {
      */
     public FillService() {
     }
-
     public FillService( String associatedUsername ) {
         this.associatedUsername = associatedUsername;
     }

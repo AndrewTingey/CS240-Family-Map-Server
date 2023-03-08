@@ -1,6 +1,8 @@
 package Results;
 import Model.Event;
 
+import java.util.List;
+
 /**
  * Object to represent responses for searching events
  */
@@ -8,7 +10,7 @@ public class EventResult extends Result {
     /**
      * array of event objects
      */
-    private Event[] data;
+    private List<Event> data;
 
     /**
      * default constructor
@@ -22,17 +24,17 @@ public class EventResult extends Result {
      * @param success
      * @param message
      */
-    public EventResult( Event[] data, boolean success, String message ) {
+    public EventResult( List<Event> data, boolean success, String message ) {
         this.data = data;
         this.success = success;
         this.message = message;
     }
 
-    public Event[] getData() {
+    public List<Event> getData() {
         return data;
     }
 
-    public void setData( Event[] data ) {
+    public void setData( List<Event> data ) {
         this.data = data;
     }
 }

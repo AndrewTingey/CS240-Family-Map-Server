@@ -11,7 +11,7 @@ public class DataAccessException extends Exception{
      * Throwable error with message
      * @param message message
      */
-    DataAccessException(String message) {
+    public DataAccessException( String message ) {
         super(message);
     }
 }
