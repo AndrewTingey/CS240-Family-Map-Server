@@ -19,7 +19,8 @@ public class RegisterResult extends Result{
     /**
      * default constructor
      */
-    public RegisterResult( String s, boolean b ) {
+    public RegisterResult( String message, boolean success ) {
+        super(message, success);
     }
 
     /**

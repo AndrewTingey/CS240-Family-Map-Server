@@ -21,8 +21,7 @@ public class LoginResult extends Result {
      * default constructor
      */
     public LoginResult( String message, boolean success ) {
-        this.message = message;
-        this.success = success;
+        super(message, success);
     }
 
     /**

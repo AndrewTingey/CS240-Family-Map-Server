@@ -47,8 +47,7 @@ public class EventIDResult extends Result {
      * default constructor
      */
     public EventIDResult( String message, boolean success ) {
-        this.message = message;
-        this.success = success;
+        super(message, success);
     }
 
     /**

@@ -31,11 +31,9 @@ public class RegisterService {
             Authtoken authtoken = new Authtoken(tokenString, r.getUsername());
             User user = new User(r.getUsername(), r.getPassword(), r.getEmail(), r.getFirstName(), r.getLastName(), r.getGender(), personID);
 
-            //TODO
             //generate 4 generations of ancestor data for new user
             FillRequest fr = new FillRequest(r.getUsername(), 4);
-            new FillService().fillFromRegister(fr, c);
-
+            new FillService().fillFromRegister(fr, c, personID); //this assumes the person registering is not married
 
             new UserDAO(c).insert(user);
             new AuthTokenDAO(c).insert(authtoken);

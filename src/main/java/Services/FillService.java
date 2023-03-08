@@ -42,7 +42,9 @@ public class FillService {
         try {
             Connection c = db.openConnection();
 
-            generatePerson("M", generations, c, 2001);
+
+            String personID = new Person().generatePersonID(associatedUsername);
+            generatePerson("M", generations, c, 2001, personID, null);
 
             db.closeConnection(true);
 
@@ -55,14 +57,14 @@ public class FillService {
             return result;
         }
     }
-    public FillResult fillFromRegister ( FillRequest r, Connection c ) {
+    public FillResult fillFromRegister ( FillRequest r, Connection c, String personID ) {
         this.associatedUsername = r.getUsername();
         int generations = 4; //default for registering
 
         Database db = new Database();
         try {
-            //dont open or close connection bc register already has one passed as c
-            generatePerson("M", generations, c, 2001);
+            //dont open or close connection bc registerService already has one passed as c
+            generatePerson("M", generations, c, 2001, personID, null );
             String message = "Successfully added " + personsAdded + " persons and " + eventsAdded + " events to the database.";
             return new FillResult(message, true);
         } catch (DataAccessException e) {
@@ -73,14 +75,14 @@ public class FillService {
         }
     }
 
-    private Person generatePerson( String gender, int generations, Connection c, int childsBday) throws DataAccessException {
+    private Person generatePerson( String gender, int generations, Connection c, int childsBday, String personID, String spouseID ) throws DataAccessException {
         Person mother = null;
         Person father = null;
 
         //generate all values of person here
         String firstName = generateFirstName(gender);
         String lastName = generateLastName(); //todo use fathers lastname here
-        String personID = new Person().generatePersonID(firstName);
+        //String personID = new Person().generatePersonID(firstName);
 
         //generate events for person here
         //int childsBday = getkidsBday();
@@ -91,31 +93,34 @@ public class FillService {
 
 
         if (generations >= 1) {
-            mother = generatePerson("F", generations - 1, c, birthDate.getYear());
-            father = generatePerson("M", generations - 1, c, birthDate.getYear());
+            String momID = new Person().generatePersonID("Mom");
+            String dadID = new Person().generatePersonID("Dad");
 
-            mother.setSpouseID(father.getPersonID());
-            father.setSpouseID(mother.getPersonID());
+            mother = generatePerson("F", generations - 1, c, birthDate.getYear(), momID, dadID);
+            father = generatePerson("M", generations - 1, c, birthDate.getYear(), dadID, momID);
 
-            //add marriage event to both mother and fathe
+            //mother.setSpouseID(father.getPersonID());
+            //father.setSpouseID(mother.getPersonID());
+
+            //add marriage event to both mother and father
             Event marriageDate = generateMarriage(birthDate.getYear());//this is wrong, i believe
             marriageDate.setPersonID(mother.getPersonID());
             new EventDAO(c).insert(marriageDate);
-            marriageDate.setPersonID(father.getPersonID());
-
+            //generate unique marriage eventID for father with fathers personID
             String eventID = new Event().generateEventID("Marriage");
             marriageDate.setEventID(eventID);
+            marriageDate.setPersonID(father.getPersonID());
             new EventDAO(c).insert(marriageDate);
             eventsAdded += 2;
         }
 
 
         //set values in person
-        Person person = null;
+        Person person;
         if (father == null) {
-            person = new Person(personID, associatedUsername, firstName, lastName, gender, null, null, null);
+            person = new Person(personID, associatedUsername, firstName, lastName, gender, null, null, spouseID);
         } else {
-            person = new Person(personID, associatedUsername, firstName, lastName, gender, father.getPersonID(), mother.getPersonID(), null);
+            person = new Person(personID, associatedUsername, firstName, lastName, gender, father.getPersonID(), mother.getPersonID(), spouseID);
         }
 
         //save person in database

@@ -15,7 +15,8 @@ public class EventResult extends Result {
     /**
      * default constructor
      */
-    public EventResult() {
+    public EventResult(String message, boolean success) {
+        super(message, success);
     }
 
     /**
@@ -25,9 +26,8 @@ public class EventResult extends Result {
      * @param message
      */
     public EventResult( List<Event> data, boolean success, String message ) {
+        super(message, success);
         this.data = data;
-        this.success = success;
-        this.message = message;
     }
 
     public List<Event> getData() {

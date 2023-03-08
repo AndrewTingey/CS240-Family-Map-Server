@@ -13,8 +13,7 @@ service class
             FillService - fill generations FMSI.pptx, slide 14
             EventService
             EventIDService
-            LoadService - never tested this one, hopefully it works
-        TODO:
+            LoadService
             PersonIDService
             PersonService
 
@@ -32,16 +31,6 @@ request/result classes - success/message in base class
         ClearResult, EventIDResult, EventResult done
         finish the other 6 inheriting from Result.java
 DAO classes
-
-can do:
-class persongenerator - so that fillservice and registerservice
-dont share or break one db connection
-
-Generate a fake family tree (algorithm given) ^v
-
-can do:
-loading JSON data, create classes that match the data
-use a static class to cache the data
 
 can do:
 set generate people such that children inherit fathers last name

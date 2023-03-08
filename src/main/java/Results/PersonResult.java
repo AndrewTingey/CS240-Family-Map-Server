@@ -2,63 +2,41 @@ package Results;
 
 import Model.Person;
 
+import java.util.List;
+
 /**
  * Response from searching person
  */
-public class PersonResult {
+public class PersonResult extends Result {
 
     /**
      * array of person objects found in database
      */
-    private Person[] data;
-    /**
-     * error message if unsuccessful
-     */
-    private String message;
-    /**
-     * if person was found in database or not
-     */
-    private boolean success;
+    private List<Person> data;
 
     /**
      * default constructor
      */
-    public PersonResult() {
+    public PersonResult( String message, boolean success ) {
+        super(message, success);
     }
 
     /**
-     * parameterized contructor
+     * success contructor
      * @param data
      * @param message
      * @param success
      */
-    public PersonResult( Person[] data, String message, boolean success ) {
+    public PersonResult( String message, boolean success, List<Person> data ) {
+        super(message, success);
         this.data = data;
-        this.message = message;
-        this.success = success;
     }
 
-    public Person[] getData() {
+    public List<Person> getData() {
         return data;
     }
 
-    public void setData( Person[] data ) {
+    public void setData( List<Person> data ) {
         this.data = data;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage( String message ) {
-        this.message = message;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess( boolean success ) {
-        this.success = success;
     }
 }

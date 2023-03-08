@@ -12,6 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RegisterServiceTest {
     private RegisterResult registerResult;
 
+    @BeforeEach
+    public void clear() {
+        new ClearService().clear();
+    }
+
     @Test
     public void register() {
         RegisterRequest request = new RegisterRequest("andrewtingey", "12345", "at@gmail", "Andy", "Ting", "M");

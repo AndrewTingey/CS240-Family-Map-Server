@@ -39,7 +39,6 @@ public class LoadService {
                 new EventDAO(c).insert(event);
             }
 
-
             db.closeConnection(true);
             LoadResult result = new LoadResult("Successfully added " + usersToAdd.size() +
                     " users, " + personsToAdd.size() + " persons, and " + eventsToAdd.size() + " events to the database", true);

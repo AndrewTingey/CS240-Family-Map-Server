@@ -25,6 +25,9 @@ public class EventService {
 
             //get username from authtoken
             Authtoken a = new AuthTokenDAO(c).find(authToken);
+            if (a == null) {
+                throw new DataAccessException("Authtoken does not exist");
+            }
             String username = a.getUsername();
 
             //get all events for all family members of the current user

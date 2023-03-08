@@ -21,7 +21,7 @@ public class FillServiceTest {
 
     @Test
     public void fill() {
-        FillRequest request = new FillRequest("andrewtingey", 4);
+        FillRequest request = new FillRequest("andrewtingey", 3);
         FillResult result = new FillService().fill(request);
         System.out.println(result.getMessage());
         assertTrue(result.isSuccess());
