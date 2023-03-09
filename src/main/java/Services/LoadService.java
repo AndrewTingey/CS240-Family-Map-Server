@@ -40,8 +40,10 @@ public class LoadService {
             }
 
             db.closeConnection(true);
-            LoadResult result = new LoadResult("Successfully added " + usersToAdd.size() +
-                    " users, " + personsToAdd.size() + " persons, and " + eventsToAdd.size() + " events to the database", true);
+            String message = "Successfully added " + usersToAdd.size() +
+                    " users, " + personsToAdd.size() + " persons, and " + eventsToAdd.size() + " events to the database";
+            System.out.println(message);
+            LoadResult result = new LoadResult(message, true);
             return result;
         } catch (DataAccessException e) {
             db.closeConnection(false);

@@ -20,8 +20,6 @@ public class FileHandler implements HttpHandler {
          }
          String filePath = "web" + urlPath;
 
-         System.out.println("File Path: " + filePath);
-
          File file = new File(filePath);
          if (!file.exists()) {
              //return error 404

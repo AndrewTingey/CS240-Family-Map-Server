@@ -5,17 +5,21 @@ encoder class json to objects, other way, using GSON
 GSON dependency already added
 
 to do
-service class
+Handler Classes - compare to ListGamesHandler.java
         DONE:
-            ClearService
-            LoginService
-            RegisterService - needs fill generation
-            FillService - fill generations FMSI.pptx, slide 14
-            EventService
-            EventIDService
-            LoadService
-            PersonIDService
-            PersonService
+        add try catch blocks to these, copy /person format{
+            /clear
+            /user/login
+            /user/register
+            /load
+        }
+        TODO:
+            /person - done, but remove message from success body,
+            /fill/[username]/{generations}
+            /person/[personID]
+            /event/[eventID]
+            /event
+
 
 
 to do

@@ -27,6 +27,9 @@ public class LoginService {
             Connection c = db.openConnection();
 
             User user = new UserDAO(c).find(r.getUsername());
+            if (user == null) {
+                throw new BadPasswordException("Username does not exist");
+            }
             if (!Objects.equals(r.getPassword(), user.getPassword())) {
                 throw new BadPasswordException("Incorrect Password");
             }
@@ -34,7 +37,7 @@ public class LoginService {
             Authtoken authtoken = new AuthTokenDAO(c).findAuthtoken(r.getUsername());
 
             db.closeConnection(true);
-            return new LoginResult(authtoken.getAuthtoken(), user.getUsername(), user.getPersonID(), true, "Success");
+            return new LoginResult(authtoken.getAuthtoken(), user.getUsername(), user.getPersonID(), true);
         } catch (DataAccessException e) {
             System.out.println(e.getMessage());
             db.closeConnection(false);

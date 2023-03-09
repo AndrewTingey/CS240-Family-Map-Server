@@ -29,14 +29,12 @@ public class RegisterResult extends Result{
      * @param username
      * @param personID
      * @param success
-     * @param message
      */
-    public RegisterResult( String authtoken, String username, String personID, boolean success, String message ) {
+    public RegisterResult( String authtoken, String username, String personID, boolean success ) {
         this.authtoken = authtoken;
         this.username = username;
         this.personID = personID;
         this.success = success;
-        this.message = message;
     }
 
     public String getAuthtoken() {

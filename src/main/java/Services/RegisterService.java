@@ -26,6 +26,11 @@ public class RegisterService {
         try {
             Connection c = db.openConnection();
 
+            //Check username already exists
+            if (new UserDAO(c).find(r.getUsername()) != null) {
+                throw new DataAccessException("Username already taken");
+            }
+
             String tokenString = new Authtoken().generateAuthtoken();
             String personID = new Person().generatePersonID(r.getUsername());
             Authtoken authtoken = new Authtoken(tokenString, r.getUsername());
@@ -40,9 +45,9 @@ public class RegisterService {
 
             db.closeConnection(true);
 
-            return new RegisterResult(authtoken.getAuthtoken(), r.getUsername(), personID, true, "Success RS.38"); // no message needed in success case
+            return new RegisterResult(authtoken.getAuthtoken(), r.getUsername(), personID, true);
         } catch (DataAccessException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Exception thrown: " + e.getMessage());
             db.closeConnection(false);
             RegisterResult result = new RegisterResult("Error: " + e.getMessage(), false);
             return result;
