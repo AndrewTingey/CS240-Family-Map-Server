@@ -34,11 +34,11 @@ public class EventService {
             List<Event> data = new EventDAO(c).findAll(username);
 
             db.closeConnection(true);
-            EventResult result = new EventResult(data, true, "A message in ES.22");
+            EventResult result = new EventResult(data, true);
             return result;
         } catch (DataAccessException e) {
             db.closeConnection(false);
-            EventResult result = new EventResult(null, false, "Error: " + e.getMessage());
+            EventResult result = new EventResult("Error: " + e.getMessage(), false);
             return result;
         }
     }

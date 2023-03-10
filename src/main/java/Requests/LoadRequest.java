@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Request to load values into the database
  */
-public class LoadRequest {
+public class LoadRequest extends Request{
     /**
      * array of user objects to be loaded
      */

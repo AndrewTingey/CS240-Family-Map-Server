@@ -23,10 +23,9 @@ public class EventResult extends Result {
      * parameterized constructor
      * @param data
      * @param success
-     * @param message
      */
-    public EventResult( List<Event> data, boolean success, String message ) {
-        super(message, success);
+    public EventResult( List<Event> data, boolean success ) {
+        this.success = success;
         this.data = data;
     }
 

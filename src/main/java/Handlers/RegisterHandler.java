@@ -2,7 +2,9 @@ package Handlers;
 
 
 import Requests.RegisterRequest;
+import Requests.Request;
 import Results.RegisterResult;
+import Results.Result;
 import Services.RegisterService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -14,21 +16,14 @@ import java.net.HttpURLConnection;
 
 //this does not work!!
 
-public class RegisterHandler implements HttpHandler {
+public class RegisterHandler extends Handler {
+
+    public RegisterHandler( ) {
+        super("post", false, true, new RegisterRequest());
+    }
+
     @Override
-    public void handle( HttpExchange exchange ) throws IOException {
-        Gson gson = new Gson();
-
-        Reader reqBody = new InputStreamReader(exchange.getRequestBody());
-        RegisterRequest request = (RegisterRequest) gson.fromJson(reqBody, RegisterRequest.class);
-
-        RegisterResult result = new RegisterService().register(request);
-
-        Writer resbody = new OutputStreamWriter(exchange.getResponseBody());
-        gson.toJson(result, resbody);
-
-        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
-        resbody.close();
+    protected Result doService( Request request, String authToken ) {
+        return new RegisterService().register((RegisterRequest) request);
     }
 }

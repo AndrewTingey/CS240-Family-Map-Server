@@ -1,41 +1,26 @@
-Create handler subclass so each can authenticate auth token
-
-to add
-encoder class json to objects, other way, using GSON
-GSON dependency already added
-
 to do
 Handler Classes - compare to ListGamesHandler.java
+        inherit all from Handler.java
         DONE:
-        add try catch blocks to these, copy /person format{
+            /person
+
             /clear
             /user/login
             /user/register
             /load
-        }
-        TODO:
-            /person - done, but remove message from success body,
+            /event
+            /event/[eventID] - fix json return message "Success"
             /fill/[username]/{generations}
             /person/[personID]
-            /event/[eventID]
-            /event
-
-
-
-to do
-create server project with given pass off test cases
-create server class and get filehandler working first
-this will allow you to serve the web page
+        TODO:
 
 check:
-also check for code duplication on;
-HTTP Handler classes
-Service classes
-request/result classes - success/message in base class
-        ClearResult, EventIDResult, EventResult done
-        finish the other 6 inheriting from Result.java
-DAO classes
+also check for code duplication on:
+    Service classes
+    DAO classes
 
 can do:
 set generate people such that children inherit fathers last name
 
+notes:
+    fillFromRegister() on FillService.47 and FillService.67 assumes all who are registering are a male

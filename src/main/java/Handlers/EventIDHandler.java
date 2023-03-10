@@ -2,8 +2,8 @@ package Handlers;
 
 import Requests.Request;
 import Results.Result;
-import Services.PersonIDService;
-import Services.PersonService;
+import Services.EventIDService;
+import Services.EventService;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.sun.net.httpserver.Headers;
@@ -15,29 +15,35 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 
-//2 cases here:
-//      /person
-//      /person/[personID]
-public class PersonHandler implements HttpHandler {
+public class EventIDHandler implements HttpHandler {
+
+    //2 cases
+    //  /event
+    //  /event/[eventid]
     @Override
     public void handle( HttpExchange exchange ) throws IOException {
-        System.out.println("Person Handler called");
-        String[] args = exchange.getRequestURI().toString().split("/");
+        System.out.println("EventID Handler called");
+        String URI = exchange.getRequestURI().toString();
+        String[] eventsList = URI.split("/");
+
         try {
             if (exchange.getRequestMethod().equalsIgnoreCase("get")) {
                 Headers reqHeaders = exchange.getRequestHeaders();
-                String authtoken = "";
+                String authToken = "";
                 if (reqHeaders.containsKey("Authorization")) {
-                    authtoken = reqHeaders.getFirst("Authorization");
+                    authToken = reqHeaders.getFirst("Authorization");
                 }
                 Gson gson = new Gson();
-                Result result = new Result("Error: PH.33", false);
-                String personID;
-                if (args.length == 2) { // "" / "person" / "personID"
-                    result = new PersonService().person(authtoken);
-                } else if (args.length == 3) {
-                    personID = args[2];
-                    result = new PersonIDService().personID(personID, authtoken);
+
+                Result result = new Result("Error", false);
+                if (eventsList.length == 2) { //elements should be "" "events"
+                    //events
+                    result = new EventService().event(authToken);
+                }
+                else if (eventsList.length == 3) { //elements should be "" "events" "eventID"
+                    //events/[eventID]
+                    String eventID = eventsList[2];
+                    result = new EventIDService().eventID(eventID, authToken);
                 } else {
                     //too many arguments error
                 }

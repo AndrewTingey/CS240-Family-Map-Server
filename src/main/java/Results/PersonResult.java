@@ -24,11 +24,10 @@ public class PersonResult extends Result {
     /**
      * success contructor
      * @param data
-     * @param message
      * @param success
      */
-    public PersonResult( String message, boolean success, List<Person> data ) {
-        super(message, success);
+    public PersonResult(  List<Person> data,  boolean success ) {
+        this.success = success;
         this.data = data;
     }
 

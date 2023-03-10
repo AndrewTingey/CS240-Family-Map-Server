@@ -8,11 +8,7 @@ import Results.LoginResult;
 /**
  * request to log in user
  */
-public class LoginRequest {
-    /**
-     * username entered at login
-     */
-    private String username;
+public class LoginRequest extends Request {
     /**
      * password entered at login
      */
@@ -32,14 +28,6 @@ public class LoginRequest {
     public LoginRequest( String username, String password ) {
         this.username = username;
         this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername( String username ) {
-        this.username = username;
     }
 
     public String getPassword() {

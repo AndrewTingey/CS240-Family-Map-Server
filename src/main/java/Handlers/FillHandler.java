@@ -1,9 +1,17 @@
 package Handlers;
 
+import Requests.FillRequest;
+import Results.Result;
+import Services.FillService;
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+
+import static java.lang.Integer.parseInt;
 
 public class FillHandler implements HttpHandler {
     @Override
@@ -11,18 +19,41 @@ public class FillHandler implements HttpHandler {
         //2 cases here:
         //  /fill/[username]/{generations}
         //  /fill/[username]
-        String urlPath = exchange.getRequestURI().toString();
-        //take off "/fill"
-        urlPath = urlPath.substring(5);
-        String username;
-        String generations = "";
-        if (urlPath.contains("/")) {
-            username = urlPath.substring(0, urlPath.indexOf("/"));
-            generations =  urlPath.substring(urlPath.indexOf("/"));
-        } else {
-            username = urlPath;
+
+        System.out.println("Fill Handler called");
+        String URI = exchange.getRequestURI().toString();
+        String[] args = URI.split("/");
+        try {
+            if (exchange.getRequestMethod().equalsIgnoreCase("post")) {
+                Gson gson = new Gson();
+                Result result = new Result("Error FH.32", false);
+                int generations = 0;
+                if (args.length == 3) {
+                    //generations = 4 by default
+                    generations = 4;
+                } else if (args.length == 4) { // "" / "fill" / "username" / "generations"
+                    generations = parseInt(args[3]);
+                } else {
+                    //error wrong amount of arguments
+                }
+
+                FillRequest request = new FillRequest(args[2], generations);
+                result = new FillService().fill(request);
+
+                Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
+                if (result.isSuccess()) {
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                } else {
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                }
+                gson.toJson(result, resBody);
+                resBody.close();
+            }
+        } catch (NumberFormatException | JsonIOException | IOException e) {
+            System.out.println("Error: " + e.getMessage());
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
+            exchange.getResponseBody().close();
+            e.printStackTrace();
         }
-        System.out.println("Username = " + username);
-        System.out.println("Generations = " + generations);
     }
 }

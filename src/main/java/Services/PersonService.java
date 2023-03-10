@@ -33,14 +33,13 @@ public class PersonService {
             List<Person> data = new PersonDAO(c).findAll(username);
 
             db.closeConnection(true);
-            PersonResult result = new PersonResult("Success", true, data );
+            PersonResult result = new PersonResult(data, true );
             return result;
         } catch (DataAccessException e) {
             db.closeConnection(false);
             PersonResult result = new PersonResult("Error: " + e.getMessage(), false);
+            return result;
         }
-
-        return null;
     }
 
     /**

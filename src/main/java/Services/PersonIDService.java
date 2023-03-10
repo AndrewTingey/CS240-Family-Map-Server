@@ -44,7 +44,7 @@ public class PersonIDService {
             }
 
             db.closeConnection(true);
-            PersonIDResult result = new PersonIDResult("Success", true, personFound);//fill up
+            PersonIDResult result = new PersonIDResult(true, personFound);//fill up
             return result;
         } catch (DataAccessException e) {
             db.closeConnection(false);

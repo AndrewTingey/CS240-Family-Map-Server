@@ -9,12 +9,7 @@ import Results.RegisterResult;
 /**
  * request to be received from handler and sent to data access and models
  */
-public class RegisterRequest {
-
-    /**
-     * username of registed user
-     */
-    private String username;
+public class RegisterRequest extends Request{
     /**
      * password of registered user
      */
@@ -58,14 +53,6 @@ public class RegisterRequest {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername( String username ) {
-        this.username = username;
     }
 
     public String getPassword() {

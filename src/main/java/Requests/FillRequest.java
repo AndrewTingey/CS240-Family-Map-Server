@@ -1,9 +1,6 @@
 package Requests;
 
-public class FillRequest {
-    private String username;
-
-
+public class FillRequest extends Request{
     private int generations;
 
     public FillRequest( String username, int generations ) {
@@ -12,14 +9,6 @@ public class FillRequest {
     }
 
     public FillRequest() {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername( String username ) {
-        this.username = username;
     }
     public int getGenerations() {
         return generations;

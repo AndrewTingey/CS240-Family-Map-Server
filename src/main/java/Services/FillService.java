@@ -1,9 +1,7 @@
 package Services;
 
-import DAO.DataAccessException;
-import DAO.Database;
-import DAO.EventDAO;
-import DAO.PersonDAO;
+import DAO.*;
+import Model.Authtoken;
 import Model.Event;
 import Model.Location;
 import Model.Person;
@@ -42,6 +40,11 @@ public class FillService {
         try {
             Connection c = db.openConnection();
 
+            //check if username is in database
+            Authtoken a = new AuthTokenDAO(c).findAuthtoken(associatedUsername);
+            if (a == null) {
+                throw new DataAccessException("Username \"" + associatedUsername + "\" does not exist");
+            }
 
             String personID = new Person().generatePersonID(associatedUsername);
             generatePerson("M", generations, c, 2001, personID, null);

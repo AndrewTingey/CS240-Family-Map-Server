@@ -14,6 +14,7 @@ import java.util.Objects;
 public class FileHandler implements HttpHandler {
     @Override
     public void handle( HttpExchange exchange ) throws IOException {
+        System.out.println("File Handler called");
          String urlPath = exchange.getRequestURI().toString();
          if (urlPath == null || urlPath.equals("/")) {
             urlPath = "/index.html";
