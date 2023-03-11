@@ -22,6 +22,7 @@ public class ClearHandler extends Handler {
 
     @Override
     protected Result doService( Request request, String authToken ) {
+        System.out.println("Clear Handler Called");
         return new ClearService().clear();
     }
 }

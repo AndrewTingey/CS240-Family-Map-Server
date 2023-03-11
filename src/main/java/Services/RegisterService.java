@@ -5,6 +5,7 @@ import Model.Person;
 import Model.User;
 import Requests.FillRequest;
 import Requests.RegisterRequest;
+import Results.FillResult;
 import Results.RegisterResult;
 import java.sql.Connection;
 
@@ -38,7 +39,9 @@ public class RegisterService {
 
             //generate 4 generations of ancestor data for new user
             FillRequest fr = new FillRequest(r.getUsername(), 4);
-            new FillService().fillFromRegister(fr, c, personID); //this assumes the person registering is not married
+            FillResult fillFromRegister = new FillService().fillFromRegister(fr, c, personID, r.getFirstName(), r.getLastName(), r.getGender()); //this assumes the person registering is not married
+            System.out.println(fillFromRegister.getMessage() + " for user " + r.getUsername());
+
 
             new UserDAO(c).insert(user);
             new AuthTokenDAO(c).insert(authtoken);

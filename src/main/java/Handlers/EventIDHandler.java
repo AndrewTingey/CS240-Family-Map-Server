@@ -1,6 +1,5 @@
 package Handlers;
 
-import Requests.Request;
 import Results.Result;
 import Services.EventIDService;
 import Services.EventService;
@@ -46,12 +45,14 @@ public class EventIDHandler implements HttpHandler {
                     result = new EventIDService().eventID(eventID, authToken);
                 } else {
                     //too many arguments error
+                    throw new IOException("incorrect number of arguments");
                 }
 
                 Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
                 if (result.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 } else {
+                    result = new Result(result.getMessage(), result.isSuccess()); // to eliminate non null values of year, latitude, longitude
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 }
                 gson.toJson(result, resBody);

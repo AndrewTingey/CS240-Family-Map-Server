@@ -41,11 +41,15 @@ public class FillHandler implements HttpHandler {
                 result = new FillService().fill(request);
 
                 Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
+                int responseCode;
                 if (result.isSuccess()) {
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                    responseCode = HttpURLConnection.HTTP_OK;
                 } else {
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    responseCode = HttpURLConnection.HTTP_BAD_REQUEST;
                 }
+                System.out.println("Http response code: " + responseCode);
+
+                exchange.sendResponseHeaders(responseCode, 0);
                 gson.toJson(result, resBody);
                 resBody.close();
             }

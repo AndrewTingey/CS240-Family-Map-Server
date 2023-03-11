@@ -21,6 +21,8 @@ public class LoadService {
     public LoadResult load( LoadRequest r ) {
         Database db = new Database();
         try {
+            new ClearService().clear();
+
             Connection c = db.openConnection();
 
             List<User> usersToAdd = r.getUsers();
@@ -29,6 +31,7 @@ public class LoadService {
 
             for (User user : usersToAdd) {
                 new UserDAO(c).insert(user);
+                new AuthTokenDAO(c).insertByUsername(user.getUsername());
             }
 
             for (Person person : personsToAdd) {

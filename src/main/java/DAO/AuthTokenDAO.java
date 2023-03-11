@@ -43,6 +43,20 @@ public class AuthTokenDAO {
         }
     }
 
+
+    public void insertByUsername( String username ) throws DataAccessException {
+        String sql = "INSERT INTO Authtoken (authtoken, username) VALUES (?,?)";
+        String authtoken = new Authtoken().generateAuthtoken();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, authtoken);
+            stmt.setString(2, username);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
     /**
      * clear all authorization tokens from database
      */
@@ -95,4 +109,5 @@ public class AuthTokenDAO {
             throw new DataAccessException(e.getMessage());
         }
     }
+
 }

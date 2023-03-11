@@ -52,11 +52,14 @@ public abstract class Handler implements HttpHandler {
                 Result result = doService(request, authToken);
 
                 Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
+                int httpResult;
                 if (result.isSuccess()) {
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                    httpResult = HttpURLConnection.HTTP_OK;
                 } else {
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    httpResult = HttpURLConnection.HTTP_BAD_REQUEST;
                 }
+                System.out.println("Http response code: " + httpResult);
+                exchange.sendResponseHeaders(httpResult, 0);
                 gson.toJson(result, resBody);
                 resBody.close();
             }
@@ -66,8 +69,9 @@ public abstract class Handler implements HttpHandler {
             exchange.getResponseBody().close();
             e.printStackTrace();
         } catch (BadPasswordException e) {
+            System.out.println("Error: " + e.getMessage());
             Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Result result = new Result("Authorization required", false);
             new Gson().toJson(result, resBody);
             resBody.close();

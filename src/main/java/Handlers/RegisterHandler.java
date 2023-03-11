@@ -24,6 +24,7 @@ public class RegisterHandler extends Handler {
 
     @Override
     protected Result doService( Request request, String authToken ) {
+        System.out.println("Register Handler Called");
         return new RegisterService().register((RegisterRequest) request);
     }
 }

@@ -20,6 +20,7 @@ public class LoginHandler extends Handler {
 
     @Override
     protected Result doService( Request request, String authToken ) {
+        System.out.println("Login handler called");
         return new LoginService().login((LoginRequest) request);
     }
 }

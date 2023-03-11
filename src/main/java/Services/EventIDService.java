@@ -5,6 +5,7 @@ import Model.Authtoken;
 import Model.Event;
 import Results.ClearResult;
 import Results.EventIDResult;
+import Results.Result;
 
 import java.sql.Connection;
 import java.util.Objects;

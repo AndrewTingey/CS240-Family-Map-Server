@@ -60,14 +60,50 @@ public class FillService {
             return result;
         }
     }
-    public FillResult fillFromRegister ( FillRequest r, Connection c, String personID ) {
+    public FillResult fillFromRegister ( FillRequest r, Connection c, String personID, String firstName, String lastName, String gender) {
         this.associatedUsername = r.getUsername();
         int generations = 4; //default for registering
 
         Database db = new Database();
         try {
             //dont open or close connection bc registerService already has one passed as c
-            generatePerson("M", generations, c, 2001, personID, null );
+            //do first generation with firstname/lastname, then pass on to generatePerson()
+
+            //generate events for person here
+            //int childsBday = getkidsBday();
+            Event birthDate = generateBirthdate(2001);
+            Event deathDate = generateDeathDate(birthDate);
+            birthDate.setPersonID(personID);
+            deathDate.setPersonID(personID);
+
+            String momID = new Person().generatePersonID("Mom");
+            String dadID = new Person().generatePersonID("Dad");
+
+            Person mother = generatePerson("F", generations - 1, c, birthDate.getYear(), momID, dadID);
+            Person father = generatePerson("M", generations - 1, c, birthDate.getYear(), dadID, momID);
+
+            //add marriage event to both mother and father
+            Event marriageDate = generateMarriage(birthDate.getYear());
+            marriageDate.setPersonID(mother.getPersonID());
+            new EventDAO(c).insert(marriageDate);
+            //generate unique marriage eventID for father with fathers personID
+            String eventID = new Event().generateEventID("Marriage");
+            marriageDate.setEventID(eventID);
+            marriageDate.setPersonID(father.getPersonID());
+            new EventDAO(c).insert(marriageDate);
+            eventsAdded += 2;
+
+            //set values in person
+            Person person;
+            person = new Person(personID, associatedUsername, firstName, lastName, gender, father.getPersonID(), mother.getPersonID(), null);
+
+            //save person in database
+            new EventDAO(c).insert(birthDate);
+            new EventDAO(c).insert(deathDate);
+            new PersonDAO(c).insert(person);
+            eventsAdded += 2;
+            personsAdded += 1;
+
             String message = "Successfully added " + personsAdded + " persons and " + eventsAdded + " events to the database.";
             return new FillResult(message, true);
         } catch (DataAccessException e) {

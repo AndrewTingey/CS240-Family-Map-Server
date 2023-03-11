@@ -12,6 +12,7 @@ public class LoadHandler extends Handler {
 
     @Override
     protected Result doService( Request request, String authToken ) {
+        System.out.println("Load Handler Called");
         return new LoadService().load((LoadRequest) request);
     }
 }
