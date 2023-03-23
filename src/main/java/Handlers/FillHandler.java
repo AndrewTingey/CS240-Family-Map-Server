@@ -34,7 +34,7 @@ public class FillHandler implements HttpHandler {
                 } else if (args.length == 4) { // "" / "fill" / "username" / "generations"
                     generations = parseInt(args[3]);
                 } else {
-                    //error wrong amount of arguments
+                    throw new IOException("Invalid number of arguments");
                 }
 
                 FillRequest request = new FillRequest(args[2], generations);

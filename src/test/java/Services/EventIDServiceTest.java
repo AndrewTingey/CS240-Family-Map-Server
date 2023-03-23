@@ -1,35 +1,71 @@
 package Services;
 
+import DAO.AuthTokenDAO;
+import DAO.DataAccessException;
+import DAO.Database;
+import DAO.EventDAO;
+import Model.Authtoken;
+import Model.Event;
 import Requests.RegisterRequest;
 import Results.EventIDResult;
 import Results.EventResult;
-import org.junit.jupiter.api.Test;
+import Results.RegisterResult;
+import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.sql.Connection;
 
 //These tests are horribly written, but everything works, don't worry
 public class EventIDServiceTest {
-    private EventIDService evIDService;
-    private String eventID;
+    private Connection c;
+    private Database db;
 
-    @Test
+    @BeforeEach
     public void setup() {
-        //clear db
-        new ClearService().clear();
 
-        //register self
-        RegisterRequest request = new RegisterRequest("andrewtingey", "12345", "at@gmail", "Andy", "Ting", "M");
-        new RegisterService().register(request);
-
-        //register other guy
-        request = new RegisterRequest("gtt", "67890", "gt@gmail", "gran", "Ting", "M");
-        new RegisterService().register(request);
+        Event event1 = new Event("ID123", "testing_andrew", "andrew123", 100F, 100F, "Las Vegas", "NV", "Party_Time", 2023);
+        Event event2 = new Event("ID456", "testing_andrew", "andrew123", -10F, -10F, "Provo", "UT", "Study_Time", 2023);
+        Authtoken authtoken = new Authtoken("testing_authtoken", "testing_andrew");
+        //insert event and authtoken
+        try {
+            this.db = new Database();
+            this.c = db.openConnection();
+            new EventDAO(c).insert(event1);
+            new EventDAO(c).insert(event2);
+            new AuthTokenDAO(c).insert(authtoken);
+            db.closeConnection(true);
+        } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
+            db.closeConnection(false);
+        }
     }
     @Test
     public void getIDPass() {
-        evIDService = new EventIDService();
-        EventIDResult result = evIDService.eventID("Birth3c3cbc","912f78d5-c7c9-41b3-9a7b-c7fd0c4a2160");
+        EventIDService evIDService = new EventIDService();
+        EventIDResult result = evIDService.eventID("ID123","testing_authtoken");
         System.out.println(result.getMessage());
         assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void getIDFail() {
+        EventIDResult result1 = new EventIDService().eventID("NotanID", "testing_authtoken");
+        EventIDResult result2 = new EventIDService().eventID("ID123", "notanauthtoken");
+        assertFalse(result1.isSuccess());
+        assertFalse(result2.isSuccess());
+    }
+
+    @AfterEach
+    public void takeDown()  {
+        //take authtoken and events back out
+        try {
+            this.db = new Database();
+            this.c = db.openConnection();
+            new EventDAO(c).clearAll("testing_andrew");
+            new AuthTokenDAO(c).clearAll("testing_andrew");
+            db.closeConnection(true);
+        } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
+            db.closeConnection(false);
+        }
     }
 }

@@ -3,9 +3,6 @@
  */
 package Requests;
 
-import Model.Person;
-import Results.RegisterResult;
-
 /**
  * request to be received from handler and sent to data access and models
  */

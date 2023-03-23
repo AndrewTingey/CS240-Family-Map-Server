@@ -5,7 +5,6 @@ package DAO;
 
 import Model.User;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 
 /**
@@ -81,6 +80,15 @@ public class UserDAO {
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
+    }
 
+    public void clearAll(String username) throws DataAccessException {
+        String sql = "DELETE FROM User WHERE username = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 }

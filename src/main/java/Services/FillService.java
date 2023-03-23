@@ -19,6 +19,7 @@ import java.util.Random;
  * object to fill the database with data
  */
 public class FillService {
+    private static int yearSeed = 2001;
     private String associatedUsername;
     private int personsAdded = 0;
     private int eventsAdded = 0;
@@ -35,6 +36,7 @@ public class FillService {
 
         this.associatedUsername = r.getUsername();
         int generations = r.getGenerations();
+        assert generations >= 0;
 
         Database db = new Database();
         try {
@@ -47,7 +49,7 @@ public class FillService {
             }
 
             String personID = new Person().generatePersonID(associatedUsername);
-            generatePerson("M", generations, c, 2001, personID, null);
+            generatePerson("M", generations, c, yearSeed, personID, null);
 
             db.closeConnection(true);
 
@@ -60,18 +62,16 @@ public class FillService {
             return result;
         }
     }
-    public FillResult fillFromRegister ( FillRequest r, Connection c, String personID, String firstName, String lastName, String gender) {
+    protected FillResult fillFromRegister ( FillRequest r, Connection c, String personID, String firstName, String lastName, String gender) {
         this.associatedUsername = r.getUsername();
         int generations = 4; //default for registering
-
-        Database db = new Database();
         try {
             //dont open or close connection bc registerService already has one passed as c
             //do first generation with firstname/lastname, then pass on to generatePerson()
 
             //generate events for person here
-            //int childsBday = getkidsBday();
-            Event birthDate = generateBirthdate(2001);
+            int childsBday = yearSeed;
+            Event birthDate = generateBirthdate(childsBday);
             Event deathDate = generateDeathDate(birthDate);
             birthDate.setPersonID(personID);
             deathDate.setPersonID(personID);
@@ -108,7 +108,7 @@ public class FillService {
             return new FillResult(message, true);
         } catch (DataAccessException e) {
             System.out.println(e.getMessage());
-            db.closeConnection(false);
+            //db.closeConnection(false); dont forget to do this where this is called
             FillResult result = new FillResult("Error: " + e.getMessage(), false);
             return result;
         }
@@ -121,10 +121,8 @@ public class FillService {
         //generate all values of person here
         String firstName = generateFirstName(gender);
         String lastName = generateLastName(); //todo use fathers lastname here
-        //String personID = new Person().generatePersonID(firstName);
 
         //generate events for person here
-        //int childsBday = getkidsBday();
         Event birthDate = generateBirthdate(childsBday);
         Event deathDate = generateDeathDate(birthDate);
         birthDate.setPersonID(personID);

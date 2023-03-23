@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,10 +17,10 @@ public class AuthTokenDAOTest {
     @BeforeEach
     public void setUp() throws DataAccessException {
         db = new Database();
-        authtoken = new Authtoken("123abc", "at646");
+        authtoken = new Authtoken("123abc", "testing_andrew");
         Connection conn = db.getConnection();
         aDao = new AuthTokenDAO(conn);
-        aDao.clear();
+        aDao.clearAll("testing_andrew");
     }
 
     @AfterEach
@@ -30,39 +29,106 @@ public class AuthTokenDAOTest {
     }
 
     @Test
-    public void insertPass() throws DataAccessException {
-        aDao.insert(authtoken);
-        Authtoken compare = aDao.find(authtoken.getAuthtoken());
-        assertNotNull(compare);
-        assertEquals(authtoken, compare);
+    public void insertPass() {
+        try {
+            aDao.insert(authtoken);
+            Authtoken compare = aDao.find(authtoken.getAuthtoken());
+            assertNotNull(compare);
+            assertEquals(authtoken, compare);
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
     }
     @Test
-    public void insertFail() throws DataAccessException {
-        aDao.insert(authtoken);
-        assertThrows(DataAccessException.class, () -> aDao.insert(authtoken));
+    public void insertFail() {
+        try {
+            //second insert of same authtoken
+            aDao.insert(authtoken);
+            assertThrows(DataAccessException.class, () -> aDao.insert(authtoken));
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
     }
 
     @Test
-    public void getPass() throws DataAccessException {
-        aDao.insert(authtoken);
-        Authtoken compare = aDao.find(authtoken.getAuthtoken());
-        assertNotNull(compare);
-        assertEquals(authtoken, compare);
-    }
-    @Test
-    public void getFail() throws DataAccessException {
-        Authtoken compare = aDao.find("nonexistent authtoken");
-        assertNull(compare);
+    public void insertByUsernamePass() {
+        try {
+            String authtoken = aDao.insertByUsername("testing_andrew");
+            Authtoken compare = aDao.find(authtoken);
+            assertNotNull(compare);
+            assertEquals(authtoken, compare.getAuthtoken());
+            assertEquals("testing_andrew", compare.getUsername());
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
     }
 
     @Test
-    public void clearPass() throws DataAccessException {
-        aDao.insert(authtoken);
-        Authtoken compare = aDao.find(authtoken.getAuthtoken());
-        assertNotNull(compare);
-
-        aDao.clear();
-        compare = aDao.find(authtoken.getAuthtoken());
-        assertNull(compare);
+    public void insertByUsernameFail() {
+        try {
+            //second insert of same username, should return unique authtokens
+            String authtoken1 = aDao.insertByUsername("testing_andrew");
+            assertNotEquals(authtoken1, aDao.insertByUsername("testing_andrew"));
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
     }
+    @Test
+    public void findPass() {
+        try {
+            aDao.insert(authtoken);
+            Authtoken compare = aDao.find(authtoken.getAuthtoken());
+            assertNotNull(compare);
+            assertEquals(authtoken, compare);
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
+    }
+    @Test
+    public void findFail() {
+        try {
+            Authtoken compare = aDao.find("nonexistent authtoken");
+            assertNull(compare);
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
+    }
+
+    @Test
+    public void findAuthTokenPass() {
+        try {
+            String authtoken = aDao.insertByUsername("testing_andrew");
+            Authtoken compare = aDao.findAuthtoken("testing_andrew");
+            assertNotNull(compare);
+            assertEquals(authtoken, compare.getAuthtoken());
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
+    }
+    @Test
+    public void findAuthTokenFail() {
+        try {
+            //username doesnt exist
+            Authtoken compare = aDao.findAuthtoken("testing_andrew");
+            assertNull(compare);
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
+    }
+    @Test
+    public void clearPass() {
+        try {
+            aDao.insert(authtoken);
+            Authtoken compare = aDao.find(authtoken.getAuthtoken());
+            assertNotNull(compare);
+
+            aDao.clear();
+            compare = aDao.find(authtoken.getAuthtoken());
+            assertNull(compare);
+        } catch (DataAccessException e) {
+            fail("Should not throw an exception");
+        }
+    }
+
+    //clearAll
 }

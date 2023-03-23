@@ -5,10 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,7 +42,7 @@ public class UserDAOTest {
     }
 
     @Test
-    public void getPass() throws DataAccessException {
+    public void findPass() throws DataAccessException {
         User userB = new User("gtt", "67890", "gtt@gmaiil", "Grant", "Ting", "M", "gtt");
         //User userC = new User("gtt", "24689", "mtt@gmaiil", "Mitch", "Ting", "M", "mtt");
 
@@ -58,7 +55,7 @@ public class UserDAOTest {
     }
 
     @Test
-    public void getFail() throws DataAccessException {
+    public void findFail() throws DataAccessException {
         User compareUser = uDao.find("nonexistantUsername");
         assertNull(compareUser);
     }
@@ -74,6 +71,21 @@ public class UserDAOTest {
 
         User compare = uDao.find(userA.getUsername());
         assertNull(compare);
+        compare = uDao.find(userB.getUsername());
+        assertNull(compare);
+    }
+
+    @Test
+    public void clearAllPass() throws DataAccessException {
+        User userB = new User("gtt", "67890", "gtt@gmaiil", "Grant", "Ting", "M", "gtt");
+
+        uDao.insert(userA);
+        uDao.insert(userB);
+
+        uDao.clearAll("gtt");
+
+        User compare = uDao.find(userA.getUsername());
+        assertNotNull(compare);
         compare = uDao.find(userB.getUsername());
         assertNull(compare);
     }

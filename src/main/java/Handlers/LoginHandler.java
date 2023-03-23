@@ -5,12 +5,6 @@ import Requests.Request;
 import Results.LoginResult;
 import Results.Result;
 import Services.LoginService;
-import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-
-import java.io.*;
-import java.net.HttpURLConnection;
 
 public class LoginHandler extends Handler {
 

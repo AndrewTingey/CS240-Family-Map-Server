@@ -76,7 +76,7 @@ public class EventDAOTest {
     }
 
     @Test
-    public void getPass() throws DataAccessException {
+    public void findPass() throws DataAccessException {
         Event eventB = new Event("Walking", "at646", "Gale123A",
                 12.9f, 88.1f, "USA", "Las Vegas",
                 "Walking_Around", 2001);
@@ -92,22 +92,42 @@ public class EventDAOTest {
         Event compareEvent = eDao.find(bestEvent.getEventID());
         assertNotNull(compareEvent);
         assertEquals(bestEvent, compareEvent);
-
-        //Find all test
-        List<Event> eventList = new ArrayList<>();
-        eventList.add(eventB);
-        eventList.add(eventC);
-
-        List<Event> compareList = eDao.findAll(eventB.getAssociatedUsername());
-        assertNotNull(compareList);
-        assertEquals(eventList, compareList);
     }
 
     @Test
-    public void getFail() throws DataAccessException {
+    public void findFail() throws DataAccessException {
         Event compareEvent = eDao.find("Nonexistent eventID");
         assertNull(compareEvent);
+    }
 
+    @Test
+    public void findAllPass() {
+        Event eventB = new Event("Walking", "at646", "Gale123A",
+                12.9f, 88.1f, "USA", "Las Vegas",
+                "Walking_Around", 2001);
+        Event eventC = new Event("Swimming", "at646", "Gale123A",
+                16.9f, 18.1f, "USA", "Provo",
+                "Swimming_Around", 21);
+        try {
+            eDao.insert(bestEvent);
+            eDao.insert(eventB);
+            eDao.insert(eventC);
+
+            //Find all test
+            List<Event> eventList = new ArrayList<>();
+            eventList.add(eventB);
+            eventList.add(eventC);
+
+            List<Event> compareList = eDao.findAll(eventB.getAssociatedUsername());
+            assertNotNull(compareList);
+            assertEquals(eventList, compareList);
+        } catch (DataAccessException e) {
+            fail("Should not throw an error");
+        }
+    }
+
+    @Test
+    public void findAllFail() throws DataAccessException {
         List<Event> compareEvents = eDao.findAll("nonexistentUsername");
         List<Event> emptyList = new ArrayList<>();
         assertEquals(emptyList, compareEvents);
@@ -115,6 +135,25 @@ public class EventDAOTest {
 
     @Test
     public void clearPass() throws DataAccessException {
+        Event eventB = new Event("Walking", "at646", "Gale123A",
+                12.9f, 88.1f, "USA", "Las Vegas",
+                "Walking_Around", 2001);
+        Event eventC = new Event("Swimming", "at646", "Gale123A",
+                16.9f, 18.1f, "USA", "Provo",
+                "Swimming_Around", 21);
+
+        eDao.insert(bestEvent);
+        eDao.insert(eventB);
+        eDao.insert(eventC);
+
+        //clear all
+        eDao.clear();
+        Event compare = eDao.find(bestEvent.getEventID());
+        assertNull(compare);
+    }
+
+    @Test
+    public void clearAllPass() throws DataAccessException {
         Event eventB = new Event("Walking", "at646", "Gale123A",
                 12.9f, 88.1f, "USA", "Las Vegas",
                 "Walking_Around", 2001);
@@ -134,11 +173,6 @@ public class EventDAOTest {
         compare = eDao.find(eventB.getEventID());
         assertNull(compare);
         compare = eDao.find(eventC.getEventID());
-        assertNull(compare);
-
-        //clear all
-        eDao.clear();
-        compare = eDao.find(bestEvent.getEventID());
         assertNull(compare);
     }
 }

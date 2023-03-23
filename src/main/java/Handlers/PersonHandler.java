@@ -39,7 +39,7 @@ public class PersonHandler implements HttpHandler {
                     personID = args[2];
                     result = new PersonIDService().personID(personID, authtoken);
                 } else {
-                    //too many arguments error
+                    throw new IOException("Invalid number of arguments");
                 }
 
                 Writer resBody = new OutputStreamWriter(exchange.getResponseBody());

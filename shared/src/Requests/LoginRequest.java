@@ -3,8 +3,6 @@
  */
 package Requests;
 
-import Results.LoginResult;
-
 /**
  * request to log in user
  */

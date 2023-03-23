@@ -43,8 +43,7 @@ public class AuthTokenDAO {
         }
     }
 
-
-    public void insertByUsername( String username ) throws DataAccessException {
+    public String insertByUsername( String username ) throws DataAccessException {
         String sql = "INSERT INTO Authtoken (authtoken, username) VALUES (?,?)";
         String authtoken = new Authtoken().generateAuthtoken();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -52,6 +51,7 @@ public class AuthTokenDAO {
             stmt.setString(2, username);
 
             stmt.executeUpdate();
+            return authtoken;
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -63,6 +63,22 @@ public class AuthTokenDAO {
     public void clear() throws DataAccessException {
         String sql = "DELETE FROM Authtoken";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    /**
+     * Clear by username
+     * @param associatedUsername
+     * @throws DataAccessException
+     */
+    public void clearAll( String associatedUsername ) throws DataAccessException {
+        String sql = "DELETE FROM Authtoken WHERE username = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, associatedUsername);
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
@@ -109,5 +125,4 @@ public class AuthTokenDAO {
             throw new DataAccessException(e.getMessage());
         }
     }
-
 }

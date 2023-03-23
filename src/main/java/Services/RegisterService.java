@@ -29,7 +29,7 @@ public class RegisterService {
 
             //Check username already exists
             if (new UserDAO(c).find(r.getUsername()) != null) {
-                throw new DataAccessException("Username already taken");
+                throw new DataAccessException("Username \"" + r.getUsername() + "\" already taken");
             }
 
             String tokenString = new Authtoken().generateAuthtoken();

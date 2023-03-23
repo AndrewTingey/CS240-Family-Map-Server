@@ -89,6 +89,12 @@ public class EventDAO {
         }
     }
 
+    /**
+     * returns all events from associated username
+     * @param associatedUsername
+     * @return
+     * @throws DataAccessException
+     */
     public List<Event> findAll( String associatedUsername) throws DataAccessException {
         List<Event> eventList = new ArrayList<>();
         ResultSet rs;
@@ -119,7 +125,7 @@ public class EventDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while clearing the event table");
+            throw new DataAccessException("Error encountered while clearing the event table: \n\t" + e.getMessage() );
         }
     }
 
@@ -131,7 +137,7 @@ public class EventDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while clearing the event table");
+            throw new DataAccessException("Error encountered while clearing the event table\n\t" + e.getMessage() );
         }
     }
 }

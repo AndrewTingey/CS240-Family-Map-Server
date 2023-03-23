@@ -1,27 +1,26 @@
-to do
-Handler Classes - compare to ListGamesHandler.java
-        inherit all from Handler.java
+to do:
+Test Cases
         DONE:
-            /person
-
-            /clear
-            /user/login
-            /user/register
-            /load
-            /event
-            /event/[eventID] - fix json return message "Success"
-            /fill/[username]/{generations}
-            /person/[personID]
+            ClearService
+            EventIDService
+            EventService
+            FillService
+            LoadService
+            LoginService
+            PersonIDService
+            PersonService
+            RegisterService
         TODO:
 
-check:
-also check for code duplication on:
-    Service classes
-    DAO classes
-
 can do:
-set generate people such that children inherit fathers last name
+set generatePeople() such that children inherit fathers last name
 
 notes:
-    fillFromRegister() on FillService.47 and FillService.67, FillService.104 assumes all who are registering are a male
-    FillService.79 uses seed birthdate constant 2001
+    FillService.22 uses seed birthdate constant 2001
+    FillService.42 uses fill seed person as Male
+
+    -I followed "Sharing Code Between an Intellij Server Project and an Android Studio Client Project" at https://docs.google.com/document/d/14MlUzkUtiCMudym8N4ZclRY9e8ea4KdhIdTgAT293r4/edit?usp=sharing
+    first try, I named module "FMSCommunication" and got error, "output path is not specified for "FMSCommunication""
+    this resulted in no out/artifacts, so I deleted any files that were created and restarted with module "shared"
+    after building artifacts for shared, there popped up out/artifacts/FMSCommunication_jar
+    and then i dragged and dropped FMSComunication.jar, instead of copy/pasting it (<- correctly mispelled as such)

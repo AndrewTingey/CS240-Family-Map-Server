@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +46,7 @@ public class PersonDAOTest {
     }
 
     @Test
-    public void getPass() throws DataAccessException {
+    public void findPass() throws DataAccessException {
         Person personB = new Person("gtt", "andrewtingey", "grant", "Tingey",
                 "M", null, null, null);
         Person personC = new Person("notat646", "andrewtingey", "mitchell", "Tingey",
@@ -64,18 +63,37 @@ public class PersonDAOTest {
         Person comparePerson = pDao.find(personA.getPersonID());
         assertNotNull(comparePerson);
         assertEquals(personA, comparePerson);
+    }
+
+    @Test
+    public void findAllPass() throws DataAccessException {
+        Person personB = new Person("gtt", "andrewtingey", "grant", "Tingey",
+                "M", null, null, null);
+        Person personC = new Person("notat646", "andrewtingey", "mitchell", "Tingey",
+                "M", null, null, null);
+        pDao.insert(personA);
+        pDao.insert(personB);
+        pDao.insert(personC);
+
+        List<Person> peopleList = new ArrayList<>();
+        peopleList.add(personA);
+        peopleList.add(personB);
+        peopleList.add(personC);
 
         List<Person> comparePeople = pDao.findAll(personA.getAssociatedUsername());
         assertNotNull(comparePeople);
         assertEquals(peopleList, comparePeople);
+
     }
 
     @Test
-    public void getFail() throws DataAccessException {
+    public void findFail() throws DataAccessException {
         Person comparePerson = pDao.find("NonexistantPersonID");
         assertNull(comparePerson);
+    }
 
-
+    @Test
+    public void findAllFail() throws DataAccessException {
         List<Person> comparePeople = pDao.findAll("nonexistantAssociatedUsername");
         List<Person> emptyList = new ArrayList<>();
         assertEquals(emptyList, comparePeople);
@@ -83,6 +101,24 @@ public class PersonDAOTest {
 
     @Test
     public void clearPass() throws DataAccessException {
+        Person personB = new Person("gtt", "andrewtingey", "grant", "Tingey",
+                "M", null, null, null);
+        Person personC = new Person("notat646", "granttingey", "mitchell", "Tingey",
+                "M", null, null, null);
+        pDao.insert(personA);
+        pDao.insert(personB);
+        pDao.insert(personC);
+
+        Person compare = pDao.find(personC.getPersonID());
+        assertNotNull(compare);
+
+        pDao.clear();
+        compare = pDao.find(personC.getPersonID());
+        assertNull(compare);
+    }
+
+    @Test
+    public void clearAllPass() throws DataAccessException {
         Person personB = new Person("gtt", "andrewtingey", "grant", "Tingey",
                 "M", null, null, null);
         Person personC = new Person("notat646", "granttingey", "mitchell", "Tingey",
@@ -100,10 +136,6 @@ public class PersonDAOTest {
         //should not clear username granttingey
         compare = pDao.find(personC.getPersonID());
         assertNotNull(compare);
-
-        pDao.clear();
-        compare = pDao.find(personC.getPersonID());
-        assertNull(compare);
     }
 }
 
